@@ -1,0 +1,44 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+input[type=text], input[type=password] {
+	display: block;
+	margin: 0.25em 0;
+	border: 1px solid lightgray;
+	border-radius: 4px;
+	padding: 0.5em;
+}
+
+input[type=text]:focus:invalid, input[type=password]:focus:invalid {
+	border-color: red;
+}
+
+button {
+	background-color: darkcyan;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	padding: 0.5em 1em;
+}
+
+button:disabled {
+	opacity: 0.5;
+}
+
+.container {
+	margin: 0 auto;
+	max-width: 960px;
+	padding: 0 20px;
+}
+
+#result {
+	margin-top: 0.25em;
+	background-color: lightgray;
+	border-left: 5px solid darkcyan;
+	padding: 0.5em;
+}
+
+#copy {
+	margin-left: 0.25em;
+}

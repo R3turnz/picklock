@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Picklock</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="static/icons/key.png">
+        <link rel="stylesheet" href="static/css/picklock.min.css">
+        <script defer src="static/js/picklock.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+            	<h1>Picklock</h1>
+            </header>
+            <noscript>
+                <b>Javascript is required.</b>
+            </noscript>
+            <form>
+				<label for="service">Service</label>
+				<input required type="text" name="service">
+				<label for="key">Key</label>
+                <input required minlength="8" type="password" name="key">
+				<button id="generate">Generate</button>
+            </form>
+        </div>
+    </body>
+</html>
