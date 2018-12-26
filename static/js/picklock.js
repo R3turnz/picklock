@@ -1,10 +1,27 @@
 var form = document.forms[0];
+var keyInput = form.elements["key"];
+var unmaskButton = document.getElementById("unmask");
+var generateButton = document.getElementById("generate");
+
+function maskPassword() {
+	keyInput.type = "password";
+	unmaskButton.disabled = false;
+}
+
+keyInput.addEventListener("focus", maskPassword);
+
+unmaskButton.addEventListener("click", function(event) {
+	event.preventDefault();
+	unmaskButton.disabled = true;
+	keyInput.type = "text";
+});
+
 form.addEventListener("submit", function(event) {
 	event.preventDefault();
-	let generateButton = document.getElementById("generate");
 	generateButton.disabled = true;
+	maskPassword();
 	let service = form.elements["service"].value;
-	let key = form.elements["key"].value;
+	let key = keyInput.value;
 	let bytes = new TextEncoder().encode(service + key);
 	let salt = Uint8Array.from(atob("qS4rkSr5KGt"), c => c.charCodeAt(0));
 	window.crypto.subtle.importKey("raw", bytes, {name: "PBKDF2"}, false, ["deriveBits"]).then(function(key) {
