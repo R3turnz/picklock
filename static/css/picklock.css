@@ -40,7 +40,7 @@ button:disabled {
 	opacity: 0.5;
 }
 
-#unmask {
+#unmask, #copy {
 	margin-left: 0.25em;
 }
 
@@ -53,8 +53,4 @@ button:disabled {
 	background-color: lightgray;
 	border-left: 5px solid darkcyan;
 	padding: 0.5em;
-}
-
-#copy {
-	margin-left: 0.25em;
 }
