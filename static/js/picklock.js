@@ -1,23 +1,23 @@
 var form = document.forms[0];
 var keyInput = form.elements["key"];
 var unmaskButton = document.getElementById("unmask");
-var generateButton = document.getElementById("generate");
 
 function maskPassword() {
+	keyInput.removeEventListener("focus", maskPassword);
 	keyInput.type = "password";
 	unmaskButton.disabled = false;
 }
-
-keyInput.addEventListener("focus", maskPassword);
 
 unmaskButton.addEventListener("click", function(event) {
 	event.preventDefault();
 	unmaskButton.disabled = true;
 	keyInput.type = "text";
+	keyInput.addEventListener("focus", maskPassword);
 });
 
 form.addEventListener("submit", function(event) {
 	event.preventDefault();
+	let generateButton = document.getElementById("generate");
 	generateButton.disabled = true;
 	maskPassword();
 	let service = form.elements["service"].value;
