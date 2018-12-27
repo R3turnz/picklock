@@ -40,6 +40,10 @@ button:disabled {
 	opacity: 0.5;
 }
 
+#unmask {
+	margin-left: 0.25em;
+}
+
 #generate {
 	display: block;
 }
