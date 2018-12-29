@@ -1,6 +1,7 @@
 var form = document.forms[0];
 var keyInput = form.elements["key"];
 var unmaskButton = document.getElementById("unmask");
+var generateButton = document.getElementById("generate");
 
 function maskPassword() {
 	keyInput.removeEventListener("focus", maskPassword);
@@ -17,7 +18,6 @@ unmaskButton.addEventListener("click", function(event) {
 
 form.addEventListener("submit", function(event) {
 	event.preventDefault();
-	let generateButton = document.getElementById("generate");
 	generateButton.disabled = true;
 	maskPassword();
 	let service = form.elements["service"].value;
@@ -28,15 +28,18 @@ form.addEventListener("submit", function(event) {
 		window.crypto.subtle.deriveBits({name: "PBKDF2", hash: "SHA-512", salt: salt, iterations: 100000}, key, 144).then(function(hash) {
 			let password = btoa(String.fromCharCode(...new Uint8Array(hash)));
 			displayResult(password);
+			form.addEventListener("input", enableGenerateButton);
 		});
 	});
-	generateButton.disabled = false;
 });
 
 function displayResult(password) {
 	let passwordSpan = document.getElementById("password");
 	if (passwordSpan !== null) {
 		passwordSpan.textContent = password;
+		let copyButton = document.getElementById("copy");
+		copyButton.textContent = "Copy";
+		copyButton.disabled = false;
 		return;
 	}
 
@@ -58,7 +61,8 @@ function displayResult(password) {
 	containerDiv.appendChild(resultDiv);
 }
 
-function copyPassword() {
+function copyPassword(event) {
+	event.target.disabled = true;
 	let password = document.getElementById("password");
 	let selection = window.getSelection();
 	let range = document.createRange();
@@ -67,4 +71,10 @@ function copyPassword() {
 	selection.addRange(range);
 	document.execCommand("copy");
 	selection.removeAllRanges();
+	event.target.textContent = "Copied to clipboard!";
+}
+
+function enableGenerateButton() {
+	form.removeEventListener("input", enableGenerateButton);
+	generateButton.disabled = false;
 }
