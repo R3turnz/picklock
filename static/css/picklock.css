@@ -8,27 +8,28 @@ body {
 	padding: 0 20px;
 }
 
-input[type=text], input[type=password] {
+label {
 	display: block;
+	margin: 0.25em 0;
+}
+
+input[type=text], input[type=password] {
 	margin: 0.25em 0;
 	border: 1px solid lightgray;
 	border-radius: 4px;
 	padding: 0.5em;
 }
 
-label[for=key] {
-	display: block;
-}
-
-input[name=key] {
-	display: inline-block;
-}
-
 input[type=text]:focus:invalid, input[type=password]:focus:invalid {
 	border-color: red;
 }
 
+input[name=key], #password {
+	margin-right: 0.5em;
+}
+
 button {
+	margin: 0.25em 0;
 	background-color: darkcyan;
 	color: white;
 	border: none;
@@ -38,10 +39,6 @@ button {
 
 button:disabled {
 	opacity: 0.5;
-}
-
-#unmask, #copy {
-	margin-left: 0.25em;
 }
 
 #generate {
