@@ -1,7 +1,6 @@
 var form = document.forms[0];
 var keyInput = form.elements["key"];
 var unmaskButton = document.getElementById("unmask");
-var generateButton = document.getElementById("generate");
 
 function maskPassword() {
 	keyInput.removeEventListener("focus", maskPassword);
@@ -16,6 +15,7 @@ unmaskButton.addEventListener("click", function(event) {
 	keyInput.addEventListener("focus", maskPassword);
 });
 
+var generateButton = document.getElementById("generate");
 form.addEventListener("submit", function(event) {
 	event.preventDefault();
 	generateButton.disabled = true;
@@ -24,8 +24,15 @@ form.addEventListener("submit", function(event) {
 	let key = keyInput.value;
 	let bytes = new TextEncoder().encode(service + key);
 	let salt = Uint8Array.from(atob("qS4rkSr5KGt"), c => c.charCodeAt(0));
-	window.crypto.subtle.importKey("raw", bytes, {name: "PBKDF2"}, false, ["deriveBits"]).then(function(key) {
-		window.crypto.subtle.deriveBits({name: "PBKDF2", hash: "SHA-512", salt: salt, iterations: 100000}, key, 144).then(function(hash) {
+	window.crypto.subtle.importKey("raw", bytes, {
+		name: "PBKDF2"
+	}, false, ["deriveBits"]).then(function(key) {
+		window.crypto.subtle.deriveBits({
+			name: "PBKDF2",
+			hash: "SHA-512",
+			salt: salt,
+			iterations: 100000
+		}, key, 144).then(function(hash) {
 			let password = btoa(String.fromCharCode(...new Uint8Array(hash)));
 			displayResult(password);
 			form.addEventListener("input", enableGenerateButton);
@@ -33,11 +40,10 @@ form.addEventListener("submit", function(event) {
 	});
 });
 
+var passwordSpan, copyButton;
 function displayResult(password) {
-	let passwordSpan = document.getElementById("password");
-	if (passwordSpan !== null) {
+	if (passwordSpan !== undefined && copyButton !== undefined) {
 		passwordSpan.textContent = password;
-		let copyButton = document.getElementById("copy");
 		copyButton.textContent = "Copy";
 		copyButton.disabled = false;
 		return;
@@ -45,13 +51,13 @@ function displayResult(password) {
 
 	let resultDiv = document.createElement("div");
 	resultDiv.setAttribute("id", "result");
-	
+
 	passwordSpan = document.createElement("span");
 	passwordSpan.setAttribute("id", "password");
 	passwordSpan.textContent = password;
 	resultDiv.appendChild(passwordSpan);
-	
-	let copyButton = document.createElement("button");
+
+	copyButton = document.createElement("button");
 	copyButton.setAttribute("id", "copy")
 	copyButton.textContent = "Copy";
 	copyButton.addEventListener("click", copyPassword);
@@ -61,17 +67,16 @@ function displayResult(password) {
 	containerDiv.appendChild(resultDiv);
 }
 
-function copyPassword(event) {
-	event.target.disabled = true;
-	let password = document.getElementById("password");
+function copyPassword() {
+	copyButton.disabled = true;
 	let selection = window.getSelection();
 	let range = document.createRange();
-	range.selectNodeContents(password);
+	range.selectNodeContents(passwordSpan);
 	selection.removeAllRanges();
 	selection.addRange(range);
 	document.execCommand("copy");
 	selection.removeAllRanges();
-	event.target.textContent = "Copied to clipboard!";
+	copyButton.textContent = "Copied to clipboard!";
 }
 
 function enableGenerateButton() {
