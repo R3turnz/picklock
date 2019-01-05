@@ -2,7 +2,6 @@ var form = document.forms[0];
 var keyInput = form.elements["key"];
 var isPasswordVisible = false;
 var toggleButton = document.getElementById("toggle");
-var generateButton = document.getElementById("generate");
 var passwordSpan, copyButton;
 
 toggleButton.addEventListener("click", function() {
@@ -13,9 +12,9 @@ toggleButton.addEventListener("click", function() {
 
 form.addEventListener("submit", function(event) {
 	event.preventDefault();
-	generateButton.disabled = true;
 	let service = form.elements["service"].value;
 	let key = form.elements["key"].value;
+	form.reset();
 	let bytes = new TextEncoder().encode(service + key);
 	let salt = Uint8Array.from(atob("qS4rkSr5KGt"), c => c.charCodeAt(0));
 	window.crypto.subtle.importKey("raw", bytes, {
@@ -29,7 +28,6 @@ form.addEventListener("submit", function(event) {
 		}, key, 144).then(function(hash) {
 			let password = btoa(String.fromCharCode(...new Uint8Array(hash)));
 			displayResult(password);
-			form.addEventListener("input", enableGenerateButton);
 		});
 	});
 });
@@ -70,9 +68,4 @@ function copyPassword() {
 	document.execCommand("copy");
 	selection.removeAllRanges();
 	copyButton.textContent = "Copied to clipboard!";
-}
-
-function enableGenerateButton() {
-	form.removeEventListener("input", enableGenerateButton);
-	generateButton.disabled = false;
 }
