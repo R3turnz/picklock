@@ -1,12 +1,11 @@
 var form = document.forms[0];
 var keyInput = form.elements["key"];
 var isPasswordVisible = false;
-var toggleButton = document.getElementById("toggle");
 var passwordSpan, copyButton;
 
-toggleButton.addEventListener("click", function() {
+document.getElementById("toggle").addEventListener("click", function(event) {
 	keyInput.type = (isPasswordVisible) ? "password" : "text";
-	toggleButton.textContent = (isPasswordVisible) ? "Show" : "Hide";
+	event.target.textContent = (isPasswordVisible) ? "Show" : "Hide";
 	isPasswordVisible = !isPasswordVisible;
 });
 
