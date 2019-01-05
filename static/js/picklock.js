@@ -1,27 +1,21 @@
 var form = document.forms[0];
 var keyInput = form.elements["key"];
-var unmaskButton = document.getElementById("unmask");
+var isPasswordVisible = false;
+var toggleButton = document.getElementById("toggle");
+var generateButton = document.getElementById("generate");
+var passwordSpan, copyButton;
 
-function maskPassword() {
-	keyInput.removeEventListener("focus", maskPassword);
-	keyInput.type = "password";
-	unmaskButton.disabled = false;
-}
-
-unmaskButton.addEventListener("click", function(event) {
-	event.preventDefault();
-	unmaskButton.disabled = true;
-	keyInput.type = "text";
-	keyInput.addEventListener("focus", maskPassword);
+toggleButton.addEventListener("click", function() {
+	keyInput.type = (isPasswordVisible) ? "password" : "text";
+	toggleButton.textContent = (isPasswordVisible) ? "Show" : "Hide";
+	isPasswordVisible = !isPasswordVisible;
 });
 
-var generateButton = document.getElementById("generate");
 form.addEventListener("submit", function(event) {
 	event.preventDefault();
 	generateButton.disabled = true;
-	maskPassword();
 	let service = form.elements["service"].value;
-	let key = keyInput.value;
+	let key = form.elements["key"].value;
 	let bytes = new TextEncoder().encode(service + key);
 	let salt = Uint8Array.from(atob("qS4rkSr5KGt"), c => c.charCodeAt(0));
 	window.crypto.subtle.importKey("raw", bytes, {
@@ -40,7 +34,6 @@ form.addEventListener("submit", function(event) {
 	});
 });
 
-var passwordSpan, copyButton;
 function displayResult(password) {
 	if (passwordSpan !== undefined && copyButton !== undefined) {
 		passwordSpan.textContent = password;
