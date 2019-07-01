@@ -67,4 +67,8 @@ function copyPassword() {
 	document.execCommand("copy");
 	selection.removeAllRanges();
 	copyButton.textContent = "Copied to clipboard!";
+	setTimeout(function() {
+		copyButton.textContent = "Copy";
+		copyButton.disabled = false;
+	}, 3000);
 }
